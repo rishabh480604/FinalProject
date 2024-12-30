@@ -1,0 +1,54 @@
+/* General container for the drone section */
+.drone-container {
+    padding: 20px;
+    max-width: 800px; /* Maximum width for the container */
+    margin: auto; /* Center the container */
+    text-align: center; /* Center text for a clean look */
+    background:#e8f4e89d;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+}
+
+/* Styles for the drone options (e.g., buttons) */
+.drone-options {
+    margin-bottom: 20px; /* Space below options */
+}
+
+/* Button styling for drone options */
+.drone-options button {
+    
+        width: 50%;
+        padding: 10px;
+        background-color: #41474c41; /* Button color */
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    
+}
+
+/* Button hover effect */
+.drone-options button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Details section for additional info */
+.drone-details {
+    margin-top: 20px; /* Space above details */
+    padding: 20px; /* Padding for details */
+    border: 1px solid #ccc; /* Border around the details */
+    border-radius: 5px; /* Rounded corners for details */
+    background-color: #e5f27256; /* Light background for details */
+    text-align: left; /* Align text to the left */
+}
+
+/* Input fields styling (if applicable) */
+.drone-options input {
+    width: 100%; /* Full width for input fields */
+    padding: 10px; /* Padding for input fields */
+    margin: 5px 0; /* Margin for spacing */
+    font-size: 16px; /* Font size for input text */
+    border: 1px solid #ccc; /* Border for input fields */
+    border-radius: 5px; /* Rounded corners for input fields */
+}

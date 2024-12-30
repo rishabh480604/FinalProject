@@ -1,0 +1,109 @@
+/* General container styling */
+.home-container {
+    text-align: center;
+    padding: 20px;
+}
+
+/* Scrolling Box */
+.scrolling-box {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    background-color: #f0f0f04a;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 40px;
+}
+
+.scrolling-container {
+    display: flex;
+    flex-wrap: nowrap;
+    animation: scroll 100s linear infinite;
+}
+
+/* Image Styling */
+.scroll-image {
+    width: 200px;
+    height: 150px;
+    margin: 0 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.scroll-image:hover {
+    transform: scale(1.2); /* Pop effect on hover */
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+}
+
+/* About Section */
+.about-section {
+    margin: 40px auto;
+    max-width: 800px;
+    padding: 20px;
+    text-align: left;
+    border-radius: 10px;
+    background-color: #e8f4e89d;
+    color: #333;
+    border: 2px solid #ccc;
+}
+
+.about-section h2 {
+    color: #2a7f2a;
+    text-align: center;
+}
+
+.about-section p {
+    color : #000;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+.about-section ul {
+    color : #000;
+    
+}
+.contact {
+    display: grid;
+    place-items: center;
+    /* height: 100vh; Optional */
+
+}
+
+/* Contact Section */
+.contact-section {
+    margin: 40px auto;
+    max-width: 800px;
+    padding: 20px;
+    text-align: left;
+    border-radius: 10px;
+    background-color: #f4e8e8;
+    color: #333;
+    border: 2px solid #ccc;
+}
+
+.contact-section h2 {
+    color: #a72a2a;
+}
+
+.contact-section p {
+    font-size: 1rem;
+}
+
+.contact-section a {
+    color: #a72a2a;
+    text-decoration: none;
+}
+
+.contact-section a:hover {
+    text-decoration: underline;
+}
+
+/* Keyframes for Scroll Animation */
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-500%);
+    }
+}

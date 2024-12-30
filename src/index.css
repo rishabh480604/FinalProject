@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Body Styles */
+body {
+  transition: background-color 0.5s, color 0.5s; /* Smooth transitions for theme change */
+  color: #242424; /* Dark text for light theme */
+  background-attachment: fixed;
+  background-size: cover; /* Cover the entire area */
+  background-position: center; /* Center the image */
+}
+
+/* Container Styles */
+.container {
+  width: 100vw;
+  min-height: 100vh;
+  background: rgba(242, 243, 221, 0.8); /* Light background for light theme with some transparency */
+  transition: 0.5s;
+  padding: 20px; /* Add some padding to container */
+}
+
+.container.dark {
+  background: rgba(48, 65, 27, 0.8); /* Dark background for dark theme with transparency */
+}
+
+/* Common Styles for Page Components */
+h1, h2, h3 {
+  margin: 20px 0; /* Margin around headers */
+}
+
+/* Button Styles */
+button {
+  background-color: #242424; /* Dark button */
+  color: #f2f3dd; /* Light button text */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #f2f3dd; /* Light button background on hover */
+  color: #242424; /* Dark text on hover */
+}
