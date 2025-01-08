@@ -3,6 +3,8 @@ import './Login.css';
 import { FaPhone, FaMapMarkerAlt, FaCity, FaLock } from "react-icons/fa";
 import axios from 'axios';
 const Login = ({ theme, setUserData }) => {
+    //check if user already login by store status
+    //if already login forward to profile
     const [isSignUp, setIsSignUp] = useState(false);
     const [phone, setPhone] = useState('');
     const [showOtp, setShowOtp] = useState(false);

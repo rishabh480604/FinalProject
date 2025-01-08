@@ -43,7 +43,7 @@ async function connectToDatabase() {
 }
 connectToDatabase(); // Call function to connect to DB
 
-// Session setup with MongoDB store
+// Session setup and return sessionId
 app.use(session({
   secret: process.env.SESSION_SECRET || 'yourSecretKey',
   resave: false,
@@ -101,7 +101,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Login user and create a session
+// Login user and create a sessionID and return sessionId and data
 app.post('/login', async (req, res) => {
   const { phone, password } = req.body;
 

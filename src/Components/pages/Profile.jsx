@@ -2,6 +2,8 @@ import React from 'react';
 import { useState } from 'react';
 
 const Profile = () => {
+  // if user logged in show data and history of transaction
+  //if not forward to login
     const [name, setName] = useState("");
     const [age, setAge] = useState("");
     const [email, setEmail] = useState("");

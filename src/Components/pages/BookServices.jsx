@@ -24,8 +24,8 @@ const BookServices = () => {
                         {selectedSubOption === 'Fertilizer' && renderFertilizerForm()}
                     </div>
                 );
-            case 'Snowing':
-                return renderSnowingForm();
+            case 'Sowing':
+                return renderSowingForm();
             case 'Testing':
                 return renderTestingForm();
             case 'Information':
@@ -68,9 +68,9 @@ const BookServices = () => {
         </div>
     );
 
-    const renderSnowingForm = () => (
+    const renderSowingForm = () => (
         <div>
-            <h4>Snowing</h4>
+            <h4>Sowing</h4>
             <input type="text" placeholder="Grain Type" />
             <input type="number" placeholder="Land Area" />
             <select>
@@ -108,7 +108,7 @@ const BookServices = () => {
             <h1>Book Services</h1>
             <div className="service-buttons">
                 <button onClick={() => { setSelectedService('Spraying'); setSelectedSubOption(''); }}>Spraying</button>
-                <button onClick={() => { setSelectedService('Snowing'); setSelectedSubOption(''); }}>Snowing</button>
+                <button onClick={() => { setSelectedService('Sowing'); setSelectedSubOption(''); }}>Sowing</button>
                 <button onClick={() => { setSelectedService('Testing'); setSelectedSubOption(''); }}>Testing</button>
                 <button onClick={() => { setSelectedService('Information'); setSelectedSubOption(''); }}>Information</button>
             </div>
