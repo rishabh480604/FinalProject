@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Login.css';
 import { FaPhone, FaMapMarkerAlt, FaCity, FaLock } from "react-icons/fa";
 import axios from 'axios';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '@/store/authSlice';
+
+ 
+import { useNavigate } from 'react-router-dom';
+
 const Login = ({ theme, setUserData }) => {
+    const dispatch=useDispatch();
+    const navigate=useNavigate();
+    
     //check if user already login by store status
     //if already login forward to profile
     const [isSignUp, setIsSignUp] = useState(false);
     const [phone, setPhone] = useState('');
     const [showOtp, setShowOtp] = useState(false);
-    const [Otp, setOtp] = useState(0);
-    const [GeneratedOtp,setGeneratedOtp]= useState(undefined);
+    const [Otp, setOtp] = useState('');
+    // const [GeneratedOtp,setGeneratedOtp]= useState('');
     const [message, setMessage] = useState('');
     const [formData, setFormData] = useState({
         firstName: '',
@@ -22,7 +31,7 @@ const Login = ({ theme, setUserData }) => {
         address: '',
         pincode: '',
     });
-
+    
     // Toggle between login and sign-up forms
     const toggleForm = () => {
         setIsSignUp(!isSignUp);
@@ -58,19 +67,28 @@ const Login = ({ theme, setUserData }) => {
         const { firstName, lastName, emailid,age, state, city, address, pincode } = formData;
         return firstName && lastName && age && state && city && address && pincode;
     };
-    //generate 6-digit otp
-    function generateOTP() {
-        return Math.floor(100000 + Math.random() * 900000);
-    }
+    
 
     // Show OTP input when "Get OTP" button is clicked
-    const handleGetOtpClick = () => {
+    const  handleGetOtpClick = async() => {
         if (phone && /^(\+91)?[6-9]\d{9}$/.test(phone)) { // Check if phone is valid before showing OTP
             setShowOtp(true);
-            let temp=generateOTP();
-            setGeneratedOtp(temp);
-            setOtp(0)
-            alert(`Your otp is ${temp}`);
+            const response=await axios.post('http://127.0.0.1:5000/generateOtp', { phone ,isSignUp});
+            
+            if(response){
+                // console.log(response.data.message);
+                alert(response.data.message);
+                if(response.data.status==409){
+                    toggleForm();
+                }
+                // alert(response.data.message);
+            }else{
+                alert("No response from api");
+            }
+            
+
+
+        
 
         } else {
             alert("Please enter a valid phone number.");
@@ -81,8 +99,15 @@ const Login = ({ theme, setUserData }) => {
     const handleRegister = async (e) => {
         // e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/register', { phone, formData });
-            setMessage(response.data.message); // Set success message from response
+            const response = await axios.post('http://127.0.0.1:5000/register', { phone, formData });
+            if(response?.status==200){
+                alert(response.data.message)
+                toggleForm();
+            }else{
+                alert(response.data.message)
+            }
+            
+            // setMessage(response.data.message); // Set success message from response
         } catch (error) {
             // Check if the error response exists and set an appropriate message
             if (error.response) {
@@ -95,14 +120,26 @@ const Login = ({ theme, setUserData }) => {
                 // Something happened in setting up the request that triggered an Error
                 setMessage('Error: ' + error.message);
             }
+        }finally{
+            setOtp('');
         }
       };
       //hnadle login
       const handleLogin = async (e) => {
         // e.preventDefault();
         try {
-          const response = await axios.post('http://localhost:5000/login', { phone }, { withCredentials: true });
-          setMessage(response.data.message);
+          const response = await axios.post('http://127.0.0.1:5000/login', { phoneNo:phone,Otp:Otp }, { withCredentials: true });
+          if(response.data.status==404){
+            alert(response.data.message);
+            toggleForm();
+          }else{
+            alert(response.data.message);
+            // console.log(response.data.user);
+            dispatch(login({userData:response.data.user}));
+            navigate("/profile");
+            // setMessage(response.data.message);
+          }
+          
         //   navigate('/dashboard');  // Redirect to dashboard on successful login
         } catch (error) {
           setMessage(error.response?.data?.message || 'Login failed');
@@ -116,28 +153,33 @@ const Login = ({ theme, setUserData }) => {
             // console.log()
             // console.log(document.getElementById('otp').innerText );
             // console.log(Otp);
-            if(GeneratedOtp!==null && GeneratedOtp==Otp){
+            // if(GeneratedOtp!==null && GeneratedOtp==Otp){
                 // alert('OTP matched');
-                
+                if(!showOtp){
+                    alert("generate Otp");
+                    return;
+                }
                 handleRegister()
-                alert(message);
-            }else{
-                alert("Invalid Otp");
-            }
+                // alert(message);
+            // }else{
+                // alert("Invalid Otp");
+            // }
             
         } else {
-            console.log(`${GeneratedOtp}  ${Otp}`)
-            if(GeneratedOtp!=null && GeneratedOtp==Otp){
-                // alert('OTP matched');
-                
                 handleLogin()
-                alert(message);
-            }else{
-                alert("Invalid Otp");
-            }
+          
             
         }
+        setOtp('')
     };
+    const isLoggedIn= useSelector((state)=> state.auth.status);
+    useEffect(()=>{
+        
+        if(isLoggedIn){
+            navigate("/profile")
+        }
+        
+    },[isLoggedIn]);
 
     return (
         <div className={`wrapper ${theme}`}>

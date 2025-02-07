@@ -1,0 +1,10 @@
+# MongoDB connection URI
+MONGO_URI=''
+
+# Session secret key for express-session
+SESSION_SECRET=''
+
+# Environment setting (production or development)
+NODE_ENV=development
+
+
