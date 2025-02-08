@@ -16,6 +16,9 @@ potato_model = tf.keras.models.load_model(potato_model_path)
 blackPepper_model_path = "blackPepperModel.keras"  # Path to your .keras file
 blackPepper_model = tf.keras.models.load_model(blackPepper_model_path)
 
+corn_model_path = "cornModel.keras"  # Path to your .keras file
+corn_model = tf.keras.models.load_model(corn_model_path)
+
 #Load llm model
 
 ## Initialize Ollama LLM
@@ -115,6 +118,37 @@ async def blackPepper_predict(file: UploadFile = File(...)):
     
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
+    
+    
+@app.post("/corn_predict")
+async def corn_predict(file: UploadFile = File(...)):
+    try:
+        # Read the image from the uploaded file
+        image_data = await file.read()
+        image = Image.open(io.BytesIO(image_data))
+
+        if not image:
+            return JSONResponse(content={"error": "Failed to open image"}, status_code=400)
+
+        # Preprocess the image
+        image_array = preprocess_image(image)
+
+        # Make predictions using the model
+        predictions = corn_model.predict(image_array)
+        print("result: ",predictions)
+        # Assuming the model returns the output as a NumPy array
+        # Modify the following line based on your model's output format
+        max_index = np.argmax(predictions, axis=1)[0]  # Index of the highest probability
+        mapping = ['corn_crisscope','corn_common_rust','corn_healthy','northern_corn_disease']  # Labels for indices
+        mapped_value = mapping[max_index]
+
+        return {"prediction": mapped_value}
+    
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+
+
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './BookServices.css';
 import conf from "./../../config"
 
@@ -7,8 +7,9 @@ const BookServices = () => {
     const [selectedSubOption, setSelectedSubOption] = useState('');
     const [selectedModel,setSelectedModel]=useState('');
     const [modelResult,setModelResult]=useState('');
+    const PlantModel=['Potato', 'Corn', 'BlackPepper'];
     //change result data with useState and in select model choice clear it past result
-
+    
     const handleBookNow = () => {
         // Redirecting to a sample payment gateway URL
         window.open('https://pay.google.com/', '_blank');
@@ -45,18 +46,18 @@ const BookServices = () => {
     const renderSelectDiagnosisPlant = () =>(
         <div>
             <h3>Plant Selection </h3>
-            <button onClick={() => 
-                {
-                    setSelectedModel('Potato') ;
-                    setModelResult('')
-                } 
-            }>Potato</button>
-            <button onClick={() => 
-                {
-                    setSelectedModel('BlackPepper') ; 
-                    setModelResult('')
-                }
-            }>BlackPepper</button>
+            {PlantModel.map((plant) => (
+                <button
+                    key={plant}
+                    className={`px-4 py-2 m-2 rounded ${selectedModel === plant ? 'bg-[#004D01] text-white' : 'bg-[#1a1d1fb2] text-black'}`}
+                    onClick={() => {
+                        setSelectedModel(plant);
+                        setModelResult('');
+                    }}
+                >
+                    {plant}
+                </button>
+            ))}
             {selectedModel!='' && renderDiagnosisForm()}
         </div>
     )
@@ -68,13 +69,13 @@ const BookServices = () => {
         fetch(fetchPlantDiagnosisLink(), {
             method: "POST",
             body: formData
-            // http://127.0.0.1:5000
+            
         })
         .then(response => response.json())
         .then(data => {
             // console.log(data);
             // return document.getElementById("result").innerText = "Prediction: " + JSON.stringify(data);//data.prediction
-            setModelResult("Prediction: " + JSON.stringify(data));
+            setModelResult("Predicted Disease : " + JSON.stringify(data.prediction));
         })
         .catch(error => {
             // return document.getElementById("result").innerText = "Error: " + error;
@@ -177,6 +178,9 @@ const BookServices = () => {
                 
             case 'BlackPepper':
                 return conf.BlackpepperModel;
+
+            case 'Corn':
+                return conf.CornModel;
 
             default :
                 return null
