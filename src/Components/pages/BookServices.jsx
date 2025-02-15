@@ -8,9 +8,72 @@ const BookServices = () => {
     const [selectedModel,setSelectedModel]=useState('');
     const [modelResult,setModelResult]=useState('');
     const PlantModel=['Potato', 'Corn', 'BlackPepper'];
+    const typesOfPesticides=['Insecticides','Herbicides','Rodenticides', 'Bactericides', 'Fungicides','Larvicides'];
+    const [pesticideForm,setPesticideForm]=useState({
+        cropName:'',
+        quantity:'',
+        cropArea:'',
+        pesticideType:'',
+        pesticideName:'',
+    });
+    const [fertilizerForm,setFertilizerForm]=useState({
+        cropName:'',
+        quantity:'',
+        cropArea:'',
+        fertilizerName:''
+    });
+    const [sowingForm,setSowingForm]=useState({
+        grainName:'',
+        landArea:'',//float
+        grainType:''
+    });
+    const [soilTestingForm,setSoilTestingForm]=useState({
+        latitude:'',
+        longitude:'',
+        samples:''
+    });
+    function handleSoilTestingFormChange(e){
+        const {name,value}=e.target;
+        setSoilTestingForm({...soilTestingForm,[name]:value});
+    }
+    function handleSowingFormChange(e){
+        const {name,value}=e.target;
+        setSowingForm({...sowingForm,[name]:value});
+    }
+    function handlePesticideFormChange(e){
+        const {name,value}=e.target;
+        setPesticideForm({...pesticideForm,[name]:value});
+    }
+    function handleFertilizerFormChange(e){
+        const {name,value}=e.target;
+        setFertilizerForm({...fertilizerForm,[name]:value});
+    }
+
+    function getLocation(){
+        try{
+            console.log('getLOcation');
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position)=>{
+
+                    const long=position.coords.longitude;
+                    const lat=position.coords.latitude;
+                    setSoilTestingForm({...soilTestingForm,['latitude']:lat,['longitude']:long});
+                    
+                    // console.log(position.coords.latitude," ",position.coords.longitude);
+                });
+              } else {
+                console.log("Geolocation not supported");
+              }
+        }catch(e){
+            console.log(e);
+        }
+        
+        
+    }
     //change result data with useState and in select model choice clear it past result
     
     const handleBookNow = () => {
+        // console.log(pesticideForm);
         // Redirecting to a sample payment gateway URL
         window.open('https://pay.google.com/', '_blank');
     };
@@ -23,10 +86,10 @@ const BookServices = () => {
                     <div>
                         <h3>Spraying Options</h3>
                         <button onClick={() => setSelectedSubOption('Pesticides')}>Pesticides</button>
-                        <button onClick={() => setSelectedSubOption('Insecticides')}>Insecticides</button>
+                        {/* <button onClick={() => setSelectedSubOption('Insecticides')}>Insecticides</button> */}
                         <button onClick={() => setSelectedSubOption('Fertilizer')}>Fertilizer</button>
                         {selectedSubOption === 'Pesticides' && renderPesticidesForm()}
-                        {selectedSubOption === 'Insecticides' && renderInsecticidesForm()}
+                        {/* {selectedSubOption === 'Insecticides' && renderInsecticidesForm()} */}
                         {selectedSubOption === 'Fertilizer' && renderFertilizerForm()}
                     </div>
                 );
@@ -94,36 +157,41 @@ const BookServices = () => {
 
     )
     const renderPesticidesForm = () => (
-        <div>
+        <form>
             <h4>Pesticides</h4>
-            <input type="text" placeholder="Type of Pesticides" />
-            <input type="number" placeholder="Quantity" />
-            <input type="text" placeholder="Crop Area" />
-            <input type="text" placeholder="Crop Type" />
+            <input type="text" name="cropName" value={pesticideForm.cropName} onChange={handlePesticideFormChange} placeholder="Crop Name" />
+            <input type="number" name='quantity' value={pesticideForm.quantity} onChange={handlePesticideFormChange} placeholder="Quantity" />
+            <input type='number' step='0.01' name='cropArea' value={pesticideForm.cropArea} onChange={handlePesticideFormChange} placeholder="Crop Area" />
+            <select name='pesticideType' value={pesticideForm.pesticideType} onChange={handlePesticideFormChange}>
+                <option value="" disabled>Select Pesticide Type:</option>
+                {typesOfPesticides.map((pesti,index)=>( 
+                <option key={index} value={pesti}>{pesti}</option>
+                ))}
+            </select>
             <button className="book-now-button" onClick={handleBookNow}>Book Now</button>
-        </div>
+        </form>
     );
 
-    const renderInsecticidesForm = () => (
-        <div>
-            <h4>Insecticides</h4>
-            <input type="text" placeholder="Type of Insecticides" />
-            <input type="number" placeholder="Quantity" />
-            <input type="text" placeholder="Crop Area" />
-            <input type="text" placeholder="Crop Type" />
-            <button className="book-now-button" onClick={handleBookNow}>Book Now</button>
-        </div>
-    );
+    // const renderInsecticidesForm = () => (
+    //     <div>
+    //         <h4>Insecticides</h4>
+    //         <input type="text" placeholder="Type of Insecticides" />
+    //         <input type="number" placeholder="Quantity" />
+    //         <input type="text" placeholder="Crop Area" />
+    //         <input type="text" placeholder="Crop Type" />
+    //         <button className="book-now-button" onClick={handleBookNow}>Book Now</button>
+    //     </div>
+    // );
 
     const renderFertilizerForm = () => (
-        <div>
+        <form>
             <h4>Fertilizer</h4>
-            <input type="text" placeholder="Soil Data" />
-            <input type="number" placeholder="Quantity" />
-            <input type="text" placeholder="Land Area" />
-            <input type="text" placeholder="Type of Fertilizer" />
+            <input type="text" name='cropName' value={fertilizerForm.cropName} placeholder="Crop Name" onChange={handleFertilizerFormChange} />
+            <input type="number" name='quantity' value={fertilizerForm.quantity} placeholder="Quantity" onChange={handleFertilizerFormChange} />
+            <input type='number' name='cropArea' value={fertilizerForm.cropArea} placeholder="Land Area" onChange={handleFertilizerFormChange}/>
+            <input type="text" name='fertilizerName' value={fertilizerForm.fertilizerName} placeholder="Fertilizer Name" onChange={handleFertilizerFormChange}/>
             <button className="book-now-button" onClick={handleBookNow}>Book Now</button>
-        </div>
+        </form>
     );
     
     // const renderDiagnosisForm =() =>(
@@ -134,24 +202,27 @@ const BookServices = () => {
 
     // )
     const renderSowingForm = () => (
-        <div>
+        <form>
             <h4>Sowing</h4>
-            <input type="text" placeholder="Grain Type" />
-            <input type="number" placeholder="Land Area" />
-            <select>
-                <option>Hybrid</option>
-                <option>Desi</option>
+            <input type="text" placeholder="Grain Name" name='grainName' value={sowingForm.grainName} onChange={handleSowingFormChange} />
+            <input type="number" step='0.01' placeholder="Land Area" name='landArea' value={sowingForm.landArea} onChange={handleSowingFormChange} />
+            <select name='grainType' value={sowingForm.grainType} onChange={handleSowingFormChange}>
+                <option value="" disabled>Select Grain Type:</option>
+                <option value='Hybrid'>Hybrid</option>
+                <option value='Desi' >Desi</option>
             </select>
             <button className="book-now-button" onClick={handleBookNow}>Book Now</button>
-        </div>
+        </form>
     );
 
     const renderTestingForm = () => (
         <div>
             <h4>Soil Testing</h4>
-            <input type="text" placeholder="Sample ID" />
-            <input type="text" placeholder="Location" />
-            <input type="number" placeholder="Number of Samples" />
+            <label for="latitude">Location : </label>
+            <input type="text" name='latitude' placeholder='Latitude' value={soilTestingForm.latitude} readOnly />
+            <input type="text" name='longitude' placeholder='Longitude' value={soilTestingForm.longitude} readOnly />
+            <button onClick={getLocation}>Get Location</button>
+            <input type="number" name='samples' value={soilTestingForm.samples} onChange={handleSoilTestingFormChange} placeholder="Number of Samples" />
             <button className="book-now-button" onClick={handleBookNow}>Book Now</button>
         </div>
     );

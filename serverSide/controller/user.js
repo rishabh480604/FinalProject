@@ -151,13 +151,12 @@ async function handleLogin(req,res){
                 status:401,
                 message:"Error in creating session"
             });
-        }
-        
-    
-
-
-    
+        }    
 }
+// async function handleLogout(req,res){
+
+
+// }
 
 module.exports={
     handleRegisteration,
