@@ -129,13 +129,15 @@ const Login = ({ theme, setUserData }) => {
         // e.preventDefault();
         try {
           const response = await axios.post('http://127.0.0.1:5000/login', { phoneNo:phone,Otp:Otp }, { withCredentials: true });
+          console.log(response.data.status);
           if(response.data.status==404){
             alert(response.data.message);
             toggleForm();
           }else{
             alert(response.data.message);
-            // console.log(response.data.user);
+            console.log(response.data.user);
             dispatch(login({userData:response.data.user}));
+
             navigate("/profile");
             // setMessage(response.data.message);
           }

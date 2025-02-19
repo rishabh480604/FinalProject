@@ -136,7 +136,11 @@ async function handleLogin(req,res){
         });
         if(response){
             res.cookie("sessionId",sessionId,{
-                maxAge: 10 * 60 * 1000   //min sec milliSec
+                maxAge: 10 * 60 * 1000,   //min sec milliSec
+                // httpOnly: true,         // Prevents JavaScript access (security best practice)
+                // secure: true,           // Requires HTTPS (remove this for local development)
+                // sameSite: "Strict",     // Prevents CSRF attacks
+                // path: "/" 
             }
             
             );

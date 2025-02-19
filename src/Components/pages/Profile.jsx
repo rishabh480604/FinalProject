@@ -21,6 +21,7 @@ const Profile = () => {
     
     useEffect(()=>{
       if(!isLoggedIn){
+        console.log("user not loggedin");
         navigate("/login");
         // setName(userData?.name);
         // setAge(userData?.age);
@@ -76,8 +77,20 @@ const Profile = () => {
           {/* Logout Button at the Bottom */}
           <div className="mt-4 text-center">
             <button 
-              onClick={() => {
+              onClick={async() => {
+                const response=await fetch('http://127.0.0.1:5000/logout',{
+                  method:"POST",
+                  credentials:'include'
+                });
+                const result=await response.json();
+                if(result.status==200){
+                  
+                  alert("logout success");
+                }else{
+                  alert(result.message);
+                }
                 dispatch(logout());
+                // console.log("logout button pressed")
                 Cookies.remove('sessionId');  // This will delete the 'sessionId' cookie
                 navigate('/login');
               }} 

@@ -60,6 +60,7 @@ const App = () => {
         }
       } else {
         // If no session cookie, log out
+        
         dispatch(logout());
       }
     };

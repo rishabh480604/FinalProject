@@ -5,8 +5,8 @@ require('dotenv').config()
 const cookieParser=require('cookie-parser')
 const {connectToMongoDB}=require('../serverSide/mongoConnect')
 const cors=require('cors');
-const {getUserData}=require('./controller/cookie')
-
+const {getUserData,handleLogout}=require('./controller/cookie')
+const {handlePesticideBooking,handleFertilizerBooking,handleSoilTestingBooking,handleSowingBooking}=require('./controller/bookService')
 // INITIAL CONFIGURATION
 const corsOptions = {
     // "http://localhost:5173" 
@@ -57,7 +57,8 @@ connectToMongoDB(process.env.MONGODB_URL)//connect with mongodb
 
 
     app.post('/generateOtp',GenerateOtp)
-    // app.post('/logout',function_name)
+    
+    app.post('/logout',handleLogout)
     /* 
     delete cookie from site
     remove sessionId from session database
@@ -68,10 +69,16 @@ connectToMongoDB(process.env.MONGODB_URL)//connect with mongodb
     later completed 
     it will run in beginning if user has session id to fetch user data
     */
+   
     app.post('/fetchData',getUserData)
     /*
     based on session id fetch data and load
     */ 
+   app.post('/bookservice/pesticide',handlePesticideBooking)
+   app.post('/bookservice/fertilizer',handleFertilizerBooking)
+   app.post('/bookservice/sowing',handleSowingBooking)
+   app.post('/bookservice/soilTest',handleSoilTestingBooking)
+   
 
 
 

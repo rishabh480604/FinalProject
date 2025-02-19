@@ -1,4 +1,5 @@
 const UserModel=require('../model/user')
+const cookieParser=require('cookie-parser');
 
 const SessionModel=require('../model/session')
 async function getUserData(req,res){
@@ -24,11 +25,32 @@ async function getUserData(req,res){
     }else{
         console.log("Session expired");
         res.send({
-            status:404,
+            status:400,
             message:"session expired "
         });
     }
 }
+
+async function handleLogout(req,res){
+    try{
+        console.log("cookie : ",req.cookies);
+        const sessionId=req.cookies.sessionId;
+        if(!sessionId){
+            return res.status(403).send({message:"invalid cookie or Time Expires"});
+        }
+        const response=await SessionModel.findOneAndDelete(sessionId);
+        if(!response){
+            return res.status(404).send({message:"Session not found in DB"});
+        }
+        res.clearCookie(sessionId,{path:'/'});
+        return res.status(200).send({message:"logout successfully"});
+    }catch(error){
+        console.log("logout error : ",error);
+        return res.status(500).send({message:"Internal Server Error"});
+    }
+    
+}
 module.exports={
     getUserData,
+    handleLogout,
 }

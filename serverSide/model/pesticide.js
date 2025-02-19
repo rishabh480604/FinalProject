@@ -16,11 +16,11 @@ const pesticideSchema = mongoose.Schema({
     require:true
   },
   quantity:{
-    type:float,
+    type:Number,
     require:true
   },
   cropArea:{
-    type:float,
+    type:Number,
     require:true
   },
   pesticideType:{
@@ -31,8 +31,8 @@ const pesticideSchema = mongoose.Schema({
     type:String,
     require:true
   },
-  testReport:File
+  testReport:Buffer,
 },{timestamps:true});
 
-const pesticideFormModel=pesticideSchema.model('pesticideForm',pesticideSchema);
+const pesticideFormModel=mongoose.model('pesticideForm',pesticideSchema);
 module.exports=pesticideFormModel;

@@ -5,11 +5,11 @@ const initialState={
     userData:null
     /*
     userData format
-    {
+    { same as database mongoDB
         Name:
         Age:
         Email:
-        ph_no:
+        phoneNo:
         Address:
         PinCode:
     }

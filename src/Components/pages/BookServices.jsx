@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './BookServices.css';
 import conf from "./../../config"
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const BookServices = () => {
     const [selectedService, setSelectedService] = useState('');
@@ -10,6 +12,8 @@ const BookServices = () => {
     const PlantModel=['Potato', 'Corn', 'BlackPepper'];
     const typesOfPesticides=['Insecticides','Herbicides','Rodenticides', 'Bactericides', 'Fungicides','Larvicides'];
     const [pesticideForm,setPesticideForm]=useState({
+        name:'',
+        phoneNo:'',
         cropName:'',
         quantity:'',
         cropArea:'',
@@ -17,21 +21,29 @@ const BookServices = () => {
         pesticideName:'',
     });
     const [fertilizerForm,setFertilizerForm]=useState({
+        name:'',
+        phoneNo:'',
         cropName:'',
         quantity:'',
         cropArea:'',
         fertilizerName:''
     });
     const [sowingForm,setSowingForm]=useState({
+        name:'',
+        phoneNo:'',
         grainName:'',
         landArea:'',//float
         grainType:''
     });
     const [soilTestingForm,setSoilTestingForm]=useState({
+        name:'',
+        phoneNo:'',
         latitude:'',
         longitude:'',
         samples:''
     });
+    const name=useSelector((state)=>state.auth.userData?.name) ?? '';
+    const phoneNo=useSelector((state)=> state.auth.userData?.phoneNo) ?? '';
     function handleSoilTestingFormChange(e){
         const {name,value}=e.target;
         setSoilTestingForm({...soilTestingForm,[name]:value});
@@ -71,11 +83,47 @@ const BookServices = () => {
         
     }
     //change result data with useState and in select model choice clear it past result
-    
-    const handleBookNow = () => {
+    function fetchBookingServiceLink(bookingService){
+        switch (bookingService) {
+            case 'fertilizer':
+                return 'http://127.0.0.1:5000/bookservice/fertilizer';
+                
+            case 'pesticide':
+                return 'http://127.0.0.1:5000/bookservice/pesticide';
+                
+
+            case 'sowing':
+                return 'http://127.0.0.1:5000/bookservice/sowing';
+            
+            case 'soilTesting':
+                return 'http://127.0.0.1:5000/bookservice/soilTest';
+                                                   
+            default:
+                return null;
+        };
+    };
+
+    const handleBookNow = async(bookingData,bookingService) => {
+
+        console.log("name : ",name,"phoneNo : ",phoneNo);
+
+        console.log("booknow function called");
+        
+        bookingData={...bookingData,name:name,phoneNo:phoneNo};
+        console.log(bookingData);
+        const bookingServiceLink=fetchBookingServiceLink(bookingService);
+        if(bookingServiceLink==null){
+            alert(" Server Issue ,Invalid booking api");
+        }
+        const response=await axios.post(bookingServiceLink,{...bookingData});
+        if(response.status==200){
+            alert("Service booked Successfully");
+        }else{
+            alert("Server Error : ",response.data.message);
+        }
         // console.log(pesticideForm);
         // Redirecting to a sample payment gateway URL
-        window.open('https://pay.google.com/', '_blank');
+        // window.open('https://pay.google.com/', '_blank');
     };
 
     
@@ -157,7 +205,7 @@ const BookServices = () => {
 
     )
     const renderPesticidesForm = () => (
-        <form>
+        <div>
             <h4>Pesticides</h4>
             <input type="text" name="cropName" value={pesticideForm.cropName} onChange={handlePesticideFormChange} placeholder="Crop Name" />
             <input type="number" name='quantity' value={pesticideForm.quantity} onChange={handlePesticideFormChange} placeholder="Quantity" />
@@ -168,8 +216,9 @@ const BookServices = () => {
                 <option key={index} value={pesti}>{pesti}</option>
                 ))}
             </select>
-            <button className="book-now-button" onClick={handleBookNow}>Book Now</button>
-        </form>
+            <input type="text" name="pesticideName" value={pesticideForm.pesticideName} onChange={handlePesticideFormChange} placeholder="pesticide Name" />
+            <button className="book-now-button" onClick={()=>handleBookNow(pesticideForm,'pesticide')}>Book Now</button>
+        </div>
     );
 
     // const renderInsecticidesForm = () => (
@@ -184,14 +233,14 @@ const BookServices = () => {
     // );
 
     const renderFertilizerForm = () => (
-        <form>
+        <div>
             <h4>Fertilizer</h4>
             <input type="text" name='cropName' value={fertilizerForm.cropName} placeholder="Crop Name" onChange={handleFertilizerFormChange} />
             <input type="number" name='quantity' value={fertilizerForm.quantity} placeholder="Quantity" onChange={handleFertilizerFormChange} />
-            <input type='number' name='cropArea' value={fertilizerForm.cropArea} placeholder="Land Area" onChange={handleFertilizerFormChange}/>
+            <input type='number' step='0.01' name='cropArea' value={fertilizerForm.cropArea} placeholder="Crop Area" onChange={handleFertilizerFormChange}/>
             <input type="text" name='fertilizerName' value={fertilizerForm.fertilizerName} placeholder="Fertilizer Name" onChange={handleFertilizerFormChange}/>
-            <button className="book-now-button" onClick={handleBookNow}>Book Now</button>
-        </form>
+            <button className="book-now-button" onClick={()=>handleBookNow(fertilizerForm,'fertilizer')}>Book Now</button>
+        </div>
     );
     
     // const renderDiagnosisForm =() =>(
@@ -202,7 +251,7 @@ const BookServices = () => {
 
     // )
     const renderSowingForm = () => (
-        <form>
+        <div>
             <h4>Sowing</h4>
             <input type="text" placeholder="Grain Name" name='grainName' value={sowingForm.grainName} onChange={handleSowingFormChange} />
             <input type="number" step='0.01' placeholder="Land Area" name='landArea' value={sowingForm.landArea} onChange={handleSowingFormChange} />
@@ -211,8 +260,8 @@ const BookServices = () => {
                 <option value='Hybrid'>Hybrid</option>
                 <option value='Desi' >Desi</option>
             </select>
-            <button className="book-now-button" onClick={handleBookNow}>Book Now</button>
-        </form>
+            <button className="book-now-button" onClick={()=>handleBookNow(sowingForm,'sowing')}>Book Now</button>
+        </div>
     );
 
     const renderTestingForm = () => (
@@ -223,7 +272,7 @@ const BookServices = () => {
             <input type="text" name='longitude' placeholder='Longitude' value={soilTestingForm.longitude} readOnly />
             <button onClick={getLocation}>Get Location</button>
             <input type="number" name='samples' value={soilTestingForm.samples} onChange={handleSoilTestingFormChange} placeholder="Number of Samples" />
-            <button className="book-now-button" onClick={handleBookNow}>Book Now</button>
+            <button className="book-now-button" onClick={()=>handleBookNow(soilTestingForm,'soilTesting')}>Book Now</button>
         </div>
     );
 

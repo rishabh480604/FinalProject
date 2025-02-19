@@ -12,22 +12,23 @@ const soilTestingFormSchema=mongoose.Schema({
     },
     location:{
         longitude:{
-            type:float,
+            type:Number,
             require:true
         },
         latitude:{
-            type:float,
+            type:Number,
             require:true
         }
     },
     samples:{
         type:Number,
         require:true
-    }
+    },
+    testReport:Buffer,
     
     
 });
 
-const sowingFormModel=mongoose.model('sowingForm',sowingFormSchema);
+const soilTestingFormModel=mongoose.model('soilTestingForm',soilTestingFormSchema);
 
-module.exports=sowingFormModel;
+module.exports=soilTestingFormModel;

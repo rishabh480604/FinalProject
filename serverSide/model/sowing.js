@@ -10,25 +10,21 @@ const sowingFormSchema=mongoose.Schema({
         type:String,
         required:true
     },
-    cropName:{
+    grainName:{
         type:String,
         require:true
     },
-    quantity:{
-        type:float,
+    grainType:{
+        type:String,
         require:true
     },
-    cropArea:{
-        type:float,
+    landArea:{
+        type:Number,
         require:true
 
     },
-    fertilizerName:{
-        type:string,
-        require:true
-    },
     testReport:{
-        type:File
+        type:Buffer
     }
     
 });

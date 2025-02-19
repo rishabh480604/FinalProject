@@ -12,8 +12,8 @@ add admin
 
 crop monitoring
 department wise
-in book service add quantity
+
 complete login book service profile
 
-serverside 
-spraying sowing soiltesting  ui done
+if http-only enable cant able to fetch sessionId from browser and the fetch data on refresh will not
+so currently http-only is disabled  

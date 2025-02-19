@@ -15,19 +15,19 @@ const fretilizerFormSchema=mongoose.Schema({
         require:true
     },
     testReport:{
-        type:File
+        type:Buffer
     },
     quantity:{
-        type:float,
+        type:Number,
         require:true
     },
     cropArea:{
-        type:float,
+        type:Number,
         require:true
 
     },
     fertilizerName:{
-        type:string,
+        type:String,
         require:true
     }
 });
