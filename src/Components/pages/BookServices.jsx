@@ -105,6 +105,10 @@ const BookServices = () => {
 
     const handleBookNow = async(bookingData,bookingService) => {
 
+        if(name==null || name==''){
+            alert("Please Signin");
+            return;
+        }
         console.log("name : ",name,"phoneNo : ",phoneNo);
 
         console.log("booknow function called");
