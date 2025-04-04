@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import conf from '../../config';
 
 
 const Chat =() => {
@@ -21,7 +21,7 @@ const Chat =() => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:5000/chat", {
+      const response = await fetch(conf.ChatbotUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

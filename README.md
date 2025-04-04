@@ -17,3 +17,9 @@ complete login book service profile
 
 if http-only enable cant able to fetch sessionId from browser and the fetch data on refresh will not
 so currently http-only is disabled  
+
+
+To run the project
+-> in the main folder run npm run dev
+-> in APIs older run python api.python
+-> in serverSide folder run node index.js

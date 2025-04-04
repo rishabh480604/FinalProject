@@ -3,4 +3,4 @@ session/.env
 .env
 serverSide/node_modules
 serverSide/.env
-session/node_modules
+session
